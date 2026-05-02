@@ -1,26 +1,49 @@
 #include "../headers/file_handler.h"
 
-bool get_head(const char *_filepath, Head *_head){
-	FILE *file = fopen(_filepath, "rb");
+bool file_exists(const char *filename){
+    // F_OK is a constant that checks for the "existence" of the file
+    if (access(filename, F_OK) == 0) {
+        return true;
+    }
+    return false;
+}
+
+bool read_head(const char* _file_path, Head* _head){
+	FILE* file = fopen(_file_path, "rb");
 	if(!file) return false;
 
-	Head *temp_head = malloc(sizeof(Head));
-	if(!temp_head) return false;
-
-	//go to begining of file
-	fseek(file, 0, SEEK_SET);
-	//read from file into temp_head
-	size_t n_read = fread(temp_head, sizeof(Head), 1, file);
-	//if successful set _head = temp_head
-	if(n_read != 1){
+	if(fread(_head, sizeof(Head), 1, file) != 1){
 		fclose(file);
 		return false;
 	}
-	_head = temp_head;
-	//close file
+
 	fclose(file);
-	//return true
 	return true;
 }
 
-bool get_incomplete()
+bool read_items(const char* _file_path, const size_t n_incomplete, Item* _incomplete_items, const size_t n_complete, Item* _complete_items){
+	FILE* file = fopen(_file_path, "rb");
+	if(!file) return false;
+
+	//go to where items start
+	fseek(file, sizeof(Head), SEEK_SET);
+	
+	//read incomplete items if there are any
+	if(n_incomplete > 0){
+		if(fread(_incomplete_items, sizeof(Item), n_incomplete, file) != n_incomplete){
+			fclose(file);
+			return false;
+		}
+	}
+
+	//read complete items if there are any
+	if(n_complete > 0){
+		if(fread(_complete_items, sizeof(Item), n_complete, file) != n_complete){
+			fclose(file);
+			return false;
+		}
+	}
+
+	fclose(file);
+	return true;
+}
