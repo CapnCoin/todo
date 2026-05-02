@@ -1,5 +1,24 @@
 #include "../headers/file_handler.h"
 
+bool init_file(const char* _file_name){
+	FILE* file = fopen(_file_name, "wb");
+	if(!file) return false;
+
+	Head* head = malloc(sizeof(head));
+	if(!head){
+		fclose(file);
+		return false;
+	}
+
+	head->n_incomplete = 0;
+	head->n_complete = 0;
+
+	fwrite(head, sizeof(Head), 1, file);
+
+	fclose(file);
+	return true;
+}
+
 bool file_exists(const char *filename){
     // F_OK is a constant that checks for the "existence" of the file
     if (access(filename, F_OK) == 0) {

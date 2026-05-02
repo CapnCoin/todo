@@ -7,8 +7,6 @@
 typedef struct Head{
 	size_t n_incomplete;
 	size_t n_complete;
-	size_t incomplete_offset;
-	size_t complete_offset;
 }Head;
 
 typedef struct Item{

@@ -7,13 +7,6 @@
 
 #define FILENAME "tododata"
 
-/*
-
-ADD INIT FILE FUNCTION
-
-*/
-
-
 void p_alloc_error(void){
 	printf("Allocation error\n");
 }
@@ -29,9 +22,17 @@ void p_commands(void){
 }
 
 int main(int argc, char **args){
+	if(argc == 2 && strcmp(args[1], "init") == 0){
+		if(init_file(FILENAME)){
+			printf("Successfully initialised todo in this directory.\n");
+			return true;
+		}
+		return false;
+	}
+	
 	//check if file exists
 	if(!file_exists(FILENAME)){
-		printf("Could not file a todofile. Try 'todo init'\n");
+		printf("Could not find a todofile. Try 'todo init'\n");
 		return 1;
 	}
 	
@@ -57,9 +58,6 @@ int main(int argc, char **args){
 				p_commands();
 				return 0;
 			}
-			else if(strcmp(args[1], "init")){
-				init_file(FILENAME);
-			}
 			else{
 				p_invalid_command();
 			}
@@ -73,9 +71,6 @@ int main(int argc, char **args){
 		default:
 			break;
 	}
-
-	printf("%d\n", argc);
-	printf("Hello from todo\n");
 
 	return 0;
 }

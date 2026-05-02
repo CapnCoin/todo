@@ -5,6 +5,8 @@
 #include <stdbool.h>
 #include <unistd.h>
 
+bool init_file(const char* _file_name);
+
 bool read_head(const char* _file_path, Head* _head);
 
 bool read_items(const char* _file_path, const size_t n_incomplete, Item* _incomplete_items, const size_t n_complete, Item* _complete_items);
