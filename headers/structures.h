@@ -11,5 +11,5 @@ typedef struct Head{
 
 typedef struct Item{
 	char name[MAX_NAME_SIZE];
-	char decription[MAX_DESC_SIZE];
+	char description[MAX_DESC_SIZE];
 }Item;

@@ -15,4 +15,4 @@ $(TARGET): $(OBJS)
 
 
 clean:
-	rm -f $(OBJS) $(TARGET) tododata
+	rm -f $(OBJS) $(TARGET) tododata .tododata
