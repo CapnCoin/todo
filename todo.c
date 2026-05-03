@@ -15,19 +15,24 @@ void p_invalid_command(void){
 	printf("Invalid command. try 'todo commands' to see possible commands\n");
 }
 
-void p_commands(void){
+void commands(void){
 	printf("-----COMMANDS-----\n");
-	printf("commands		-	shows all available commands\n");
-	printf("init			-	initialises a todo list in the current working directory");
+	printf("commands		-	Shows all available commands\n");
+	printf("init			-	Initialises a todo list in the current working directory");
+	printf("\n");
 }
 
 int main(int argc, char **args){
 	if(argc == 2 && strcmp(args[1], "init") == 0){
-		if(init_file(FILENAME)){
-			printf("Successfully initialised todo in this directory.\n");
-			return true;
+		if(file_exists(FILENAME)){
+			printf("You already have a todofile in this directory.\n");
+			return 0;
 		}
-		return false;
+		else if(init_file(FILENAME)){
+			printf("Successfully initialised todo in this directory.\n");
+			return 0;
+		}
+		return 1;
 	}
 	
 	//check if file exists
@@ -40,36 +45,30 @@ int main(int argc, char **args){
 	Head* head = malloc(sizeof(Head));
 	if(!head){
 		p_alloc_error();
+		return 1;
 	}
 	//read head from file
 	if(!read_head(FILENAME, head)){
 		printf("Error reading head from file");
+		return 1;
 	}
+
+	//user entered no argument
+	if(argc == 1){
 		
-	switch (argc){
-		//user hasnt passed any args
-		case 1:
-			
-			break;
-
-		//user passed 1 args
-		case 2:
-			if(strcmp(args[1], "commands")){
-				p_commands();
-				return 0;
-			}
-			else{
-				p_invalid_command();
-			}
-			break;
-
-		//user passed 2 args
-		case 3:
-
-			break;
-
-		default:
-			break;
+	}
+	//user entered one argument
+	else if(argc == 2){
+		//commands
+		if(strcmp(args[1], "commands") == 0){
+			commands();
+		}
+		else{
+			p_invalid_command();
+		}
+	}
+	else if(argc == 3){
+		
 	}
 
 	return 0;
