@@ -66,3 +66,32 @@ bool read_items(const char* _file_path, const size_t n_incomplete, Item* _incomp
 	fclose(file);
 	return true;
 }
+
+bool write_file(const char* _filename, Head* _head, Item* _incomplete_items, Item* _complete_items){
+	FILE* file = fopen(_filename, "wb");
+	if(!file) return false;
+
+	//write head
+	if(fwrite(_head, sizeof(Head), 1, file) != 1){
+		fclose(file);
+		return false;
+	}
+
+	//write incomplete items
+	if(_incomplete_items){
+		if(fwrite(_incomplete_items, sizeof(Item), _head->n_incomplete, file) != _head->n_incomplete){
+			fclose(file);
+			return false;
+		}
+	}
+
+	if(_complete_items){
+		if(fwrite(_complete_items, sizeof(Item), _head->n_complete, file) != _head->n_complete){
+			fclose(file);
+			return false;
+		}
+	}
+	
+	fclose(file);
+	return true;
+}

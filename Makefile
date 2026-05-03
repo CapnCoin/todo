@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g
-SRCS = todo.c src/file_handler.c
+SRCS = todo.c src/file_handler.c src/commands.c
 OBJS = $(SRCS:.c=.o)
 
 TARGET = todo

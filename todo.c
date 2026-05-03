@@ -4,6 +4,7 @@
 
 #include "headers/structures.h"
 #include "headers/file_handler.h"
+#include "headers/commands.h"
 
 #define FILENAME "tododata"
 
@@ -15,134 +16,10 @@ void p_invalid_command(void){
 	printf("Invalid command. try 'todo commands' to see possible commands\n");
 }
 
-void todo_commands(void){
-	printf("-----COMMANDS-----\n");
-	printf("commands		-	Shows all available commands\n");
-	printf("init			-	Initialises a todo list in the current working directory");
-	printf("destroy			-	Destroys the todofile in the current directory");
-	printf("<no command>	-	Shows all incomplete items");
-	printf("\n");
+void p_error(const char* _description){
+	printf("ERROR: %s\n", _description);
 }
 
-bool show_items(const char* _file_path, const size_t _n_incomplete, const size_t _n_complete, const char* _command){
-	//allocate memory for incomplete and complete items
-	Item* incomplete_items;
-	Item* complete_items;
-
-	//allocate incomplete items if needed
-	if(_n_incomplete > 0){
-		incomplete_items = malloc(sizeof(Item) * _n_incomplete);
-		if(!incomplete_items) return false;
-	}
-	else{
-		incomplete_items = NULL;
-	}
-
-	//allocate complete items if needed
-	if(_n_complete > 0){
-		complete_items = malloc(sizeof(Item) * _n_complete);
-		if(!complete_items){
-			if(incomplete_items) free(incomplete_items);
-			return false;
-		}
-	}
-	else{
-		complete_items = NULL;
-	}
-
-	//read file content into items
-	if(!read_items(_file_path, _n_incomplete, incomplete_items, _n_complete, complete_items)){
-		free(incomplete_items);
-		free(complete_items);
-		return false;
-	}
-
-	//print incomplete items
-	if(strcmp(_command, "incomplete") == 0){
-		if(incomplete_items){
-			printf("-----INCOMPLETE ITEMS-----\n");
-			for(size_t i = 0; i < _n_incomplete; i++){
-				printf("Name:			-	%s\n", incomplete_items[i].name);
-				printf("Description:	-	%s\n", incomplete_items[i].description);
-				printf("\n");
-			}
-		}
-		else{
-			printf("There are currently no incomplete items\n");
-		}
-	}
-	//print complete items
-	else if(strcmp(_command, "complete") == 0){
-		if(complete_items){
-			printf("-----COMPLETE ITEMS-----\n");
-			for(size_t i = 0; i < _n_complete; i++){
-				printf("Name:			-	%s\n", complete_items[i].name);
-				printf("Description:	-	%s\n", complete_items[i].description);
-				printf("\n");
-			}
-		}
-	}
-	//print all items
-	else if(strcmp(_command, "all") == 0){
-		printf("-----INCOMPLETE ITEMS-----\n");
-		if(incomplete_items){
-			for(size_t i = 0; i < _n_incomplete; i++){
-				printf("Name:			-	%s\n", incomplete_items[i].name);
-				printf("Description:	-	%s\n", incomplete_items[i].description);
-				printf("\n");
-			}
-		}
-		else{
-			printf("None\n");
-		}
-		
-		printf("\n");
-		
-		printf("-----COMPLETE ITEMS-----\n");
-		if(complete_items){
-			for(size_t i = 0; i < _n_complete; i++){
-				printf("Name:			-	%s\n", complete_items[i].name);
-				printf("Description:	-	%s\n", complete_items[i].description);
-				printf("\n");
-			}
-		}
-		else{
-			printf("None\n");
-		}
-	}
-	//invalid command
-	else{
-		free(incomplete_items);
-		free(complete_items);
-		return false;
-	}
-
-	free(incomplete_items);
-	free(complete_items);
-	return true;
-}
-
-bool todo_destroy(void){
-	if(!file_exists(FILENAME)){
-		printf("This directory is already void of a todofile\n");
-		return 0;
-	}
-	else{
-		if(remove(FILENAME) != 0){
-			printf("Failed to remove file. You can manually remove it by running 'rm .tododata' in the directory\n");
-			return 1;
-		}
-		printf("tododata successfully removed\n");
-		return 0;
-	}
-}
-
-
-/*
-
-----------MAIN FUNCTION----------
-
-*/
 int main(int argc, char **args){
 	if(argc == 2 && strcmp(args[1], "init") == 0){
 		if(file_exists(FILENAME)){
@@ -175,29 +52,48 @@ int main(int argc, char **args){
 	}
 
 	/*
-
+	-------------------------------
 	----------USER INPUTS----------
-
+	-------------------------------
 	*/
 	//user entered no argument
 	if(argc == 1){
-		show_items(FILENAME, head->n_incomplete, head->n_complete, "incomplete");
+		if(!todo_show_items(FILENAME, head->n_incomplete, head->n_complete, "incomplete")){
+			printf("ERROR: failed to show incomplete items\n");
+			return 1;
+		}
+		return 0;
 	}
-	//user entered one argument
-	else if(argc == 2){
-		//commands
+	//if user entered arguments
+	else{
+	
 		if(strcmp(args[1], "commands") == 0){
 			todo_commands();
 		}
-		else if(strcmp(args[1], "destroy") == 0){
-			todo_destroy();
-		}
-		else{
-			p_invalid_command();
-		}
-	}
-	else if(argc == 3){
 		
+		else if(strcmp(args[1], "destroy") == 0){
+			if(!todo_destroy(FILENAME)){
+				printf("ERROR: failed to destroy todofile\n");
+				return 1;
+			}
+		}
+
+		else if(strcmp(args[1], "add") == 0){
+			if(!todo_add_itemname(FILENAME, head, args[2])){
+				printf("ERROR: failed to add item\n");
+				return 1;
+			}
+			printf("Added item successfully\n");
+		}
+
+		else if(strcmp(args[1], "complete") == 0){
+			if(!todo_complete(FILENAME, head, args[2])){
+				//perror("Failed to mark item complete. Are you sure such an item exists?");
+				printf("ERROR: Failed to mark item complete. Are you sure such an item exists?\n");
+				return false;
+			}
+			printf("Successfully marked %s as complete\n", args[2]);
+		}
 	}
 
 	return 0;
