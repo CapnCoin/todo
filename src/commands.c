@@ -38,8 +38,8 @@ bool todo_show_items(const char* _file_path, const size_t _n_incomplete, const s
 		if(incomplete_items){
 			printf("-----INCOMPLETE ITEMS-----\n");
 			for(size_t i = 0; i < _n_incomplete; i++){
-				printf("Name:		-	%s\n", incomplete_items[i].name);
-				printf("Description:	-	%s\n", incomplete_items[i].description);
+				printf("Name:           -   %s\n", incomplete_items[i].name);
+				printf("Description:    -   %s\n", incomplete_items[i].description);
 				printf("\n");
 			}
 		}
@@ -52,8 +52,8 @@ bool todo_show_items(const char* _file_path, const size_t _n_incomplete, const s
 		if(complete_items){
 			printf("-----COMPLETE ITEMS-----\n");
 			for(size_t i = 0; i < _n_complete; i++){
-				printf("Name:		-	%s\n", complete_items[i].name);
-				printf("Description:	-	%s\n", complete_items[i].description);
+				printf("Name:           -   %s\n", complete_items[i].name);
+				printf("Description:    -   %s\n", complete_items[i].description);
 				printf("\n");
 			}
 		}
@@ -66,8 +66,8 @@ bool todo_show_items(const char* _file_path, const size_t _n_incomplete, const s
 		printf("-----INCOMPLETE ITEMS-----\n");
 		if(incomplete_items){
 			for(size_t i = 0; i < _n_incomplete; i++){
-				printf("Name:		-	%s\n", incomplete_items[i].name);
-				printf("Description:	-	%s\n", incomplete_items[i].description);
+				printf("Name:           -   %s\n", incomplete_items[i].name);
+				printf("Description:    -   %s\n", incomplete_items[i].description);
 				printf("\n");
 			}
 		}
@@ -80,8 +80,8 @@ bool todo_show_items(const char* _file_path, const size_t _n_incomplete, const s
 		printf("-----COMPLETE ITEMS-----\n");
 		if(complete_items){
 			for(size_t i = 0; i < _n_complete; i++){
-				printf("Name:		-	%s\n", complete_items[i].name);
-				printf("Description:	-	%s\n", complete_items[i].description);
+				printf("Name:           -   %s\n", complete_items[i].name);
+				printf("Description:    -   %s\n", complete_items[i].description);
 				printf("\n");
 			}
 		}
@@ -118,12 +118,14 @@ bool todo_destroy(const char* _filename){
 
 void todo_commands(void){
 	printf("-----COMMANDS-----\n");
-	printf("commands                 -     Shows all available commands\n");
-	printf("init                     -     Initialises a todo list in the current working directory\n");
-	printf("destroy                  -     Destroys the todofile in the current directory\n");
-	printf("<no command>             -     Shows all incomplete items\n");
-	printf("add <item name>          -     Adds a item with name <item name> to incomplete items\n");
-	printf("complete <item name>     -     Mark a incomplete item as complete\n");
+	printf("commands                -   Shows all available commands\n");
+	printf("init                    -   Initialises a todo list in the current working directory\n");
+	printf("destroy                 -   Destroys the todofile in the current directory\n");
+	printf("<no command>            -   Shows all incomplete items\n");
+	printf("add <item name>         -   Adds a item with name <item name> to incomplete items\n");
+	printf("complete <item name>    -   Mark a incomplete item as complete\n");
+	printf("all                     -   Shows all items\n");
+	printf("completed               -   Shows completed items\n");
 	printf("\n");
 }
 

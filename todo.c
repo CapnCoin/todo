@@ -90,9 +90,35 @@ int main(int argc, char **args){
 			if(!todo_complete(FILENAME, head, args[2])){
 				//perror("Failed to mark item complete. Are you sure such an item exists?");
 				printf("ERROR: Failed to mark item complete. Are you sure such an item exists?\n");
-				return false;
+				return 1;
 			}
 			printf("Successfully marked %s as complete\n", args[2]);
+		}
+
+		else if(strcmp(args[1], "all") == 0){
+		    if(argc > 2){
+		    printf("command 'all' takes no arguments\n");
+		    return 0;
+		    }
+		    if(!todo_show_items(FILENAME, head->n_incomplete, head->n_complete, "all")){
+		        printf("ERROR: Failed to show all items\n");
+		        return 1;
+		    }
+		}
+
+		else if(strcmp(args[1], "completed") == 0){
+		    if(argc > 2){
+		        printf("command 'completed' takes no arguments\n");
+		        return 0;
+		    }
+		    if(!todo_show_items(FILENAME, head->n_incomplete, head->n_complete, "complete")){
+		        printf("ERROR: Failed to show completed items\n");
+		        return 1;
+		    }
+		}
+		
+		else{
+		    printf("Invalid command\n");
 		}
 	}
 
