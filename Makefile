@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -g
 SRCS = todo.c src/file_handler.c src/commands.c
 OBJS = $(SRCS:.c=.o)
 
-TARGET = todo
+TARGET = ~/.local/bin/todo
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)
