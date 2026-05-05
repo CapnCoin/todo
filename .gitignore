@@ -2,3 +2,4 @@ tododata
 .tododata
 commands.txt
 todo
+*.o
