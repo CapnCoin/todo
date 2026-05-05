@@ -4,7 +4,7 @@ bool init_file(const char* _file_name){
 	FILE* file = fopen(_file_name, "wb");
 	if(!file) return false;
 
-	Head* head = malloc(sizeof(head));
+	Head* head = malloc(sizeof(Head));
 	if(!head){
 		fclose(file);
 		return false;
@@ -46,7 +46,7 @@ bool read_items(const char* _file_path, const size_t n_incomplete, Item* _incomp
 
 	//go to where items start
 	fseek(file, sizeof(Head), SEEK_SET);
-	
+
 	//read incomplete items if there are any
 	if(n_incomplete > 0){
 		if(fread(_incomplete_items, sizeof(Item), n_incomplete, file) != n_incomplete){
@@ -91,7 +91,7 @@ bool write_file(const char* _filename, Head* _head, Item* _incomplete_items, Ite
 			return false;
 		}
 	}
-	
+
 	fclose(file);
 	return true;
 }
